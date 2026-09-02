@@ -12,28 +12,30 @@ This plugin brings Kaitoi's video models into the DaVinci Resolve timeline. Park
 
 The clip itself goes to the model. Motion is preserved; look, subject or style change with the prompt.
 
-| In the panel | Kaitoi node |
-|---|---|
-| Ray35 | `builtin/third_party/fal/ray35_v2v` |
-| Lucy Edit Fast | `builtin/third_party/fal/lucy_edit_fast` |
-| Kling O3 Edit | `builtin/third_party/fal/kling_o3_standard_v2v_edit` |
-| Ltx2 V2V | `builtin/third_party/fal/ltx_2_19b_video_to_video` |
-| Render To Real | `builtin/third_party/fal/ltx_render_to_real` |
-| Ray3 Modify | `builtin/third_party/lumalabs/ray3_modify_video` |
-| Reverse Selftest (free, local) | `builtin/video/video_reverse` |
+| Model | Kaitoi node | In the panel |
+|---|---|---|
+| Ray 3.2 Video Edit | `builtin/third_party/fal/ray35_v2v` | Ray35 |
+| Lucy Edit Fast | `builtin/third_party/fal/lucy_edit_fast` | Lucy Edit Fast |
+| Kling O3 Standard v2v Edit | `builtin/third_party/fal/kling_o3_standard_v2v_edit` | Kling O3 Edit |
+| LTX 2 Video-to-Video | `builtin/third_party/fal/ltx_2_19b_video_to_video` | Ltx2 V2V |
+| Render to Real | `builtin/third_party/fal/ltx_render_to_real` | Render To Real |
+| Luma Ray 3 Modify Video | `builtin/third_party/lumalabs/ray3_modify_video` | Ray3 Modify |
+| Video Reverse & Speed (free, local) | `builtin/video/video_reverse` | Reverse Selftest |
 
 ### Generate a new shot from a frame (Image → Video)
 
 The clip's first frame seeds a freshly generated shot.
 
-| In the panel | Kaitoi node |
-|---|---|
-| Seedance2 | `builtin/third_party/fal/seedance_2_i2v` |
-| Hailuo 23 | `builtin/third_party/fal/hailuo_23_fast_pro` |
-| Kling O3 I2V | `builtin/third_party/fal/kling_o3_standard_i2v` |
-| Ltx23 Pro | `builtin/third_party/fal/ltx_video_23_pro` |
-| Veo31 Fast | `builtin/third_party/fal/google_veo31_fast_i2v` |
-| Ray3 | `builtin/third_party/lumalabs/ray3_video` |
+| Model | Kaitoi node | In the panel |
+|---|---|---|
+| Seedance 2.0 i2v | `builtin/third_party/fal/seedance_2_i2v` | Seedance2 |
+| Hailuo 2.3 Fast Pro | `builtin/third_party/fal/hailuo_23_fast_pro` | Hailuo 23 |
+| Kling Video O3 Standard i2v | `builtin/third_party/fal/kling_o3_standard_i2v` | Kling O3 I2V |
+| LTX Video 2.3 Pro | `builtin/third_party/fal/ltx_video_23_pro` | Ltx23 Pro |
+| Google Veo 3.1 Fast i2v | `builtin/third_party/fal/google_veo31_fast_i2v` | Veo31 Fast |
+| Luma Ray 3 | `builtin/third_party/lumalabs/ray3_video` | Ray3 |
+
+The **Model** dropdown labels each preset by its key and the node's short name (`Ray35   (ray35_v2v)`), so the node column is what to match on.
 
 Any other Kaitoi node type with a video or image input and a prompt works too: presets are one line each in [`graphs.py`](kaitoi_resolve/graphs.py), and the graph is wired from the node's live schema, not hard-coded pin names.
 
@@ -102,12 +104,12 @@ python3 "Kaitoi Video.py" --check   # print the clip under the playhead and exit
 ## Example usage
 
 **"Make it rain."**
-> Video → Video, Ray35. Prompt: *"same shot at night in heavy rain, wet asphalt reflections, keep the camera move"*
+> Video → Video, Ray 3.2 Video Edit. Prompt: *"same shot at night in heavy rain, wet asphalt reflections, keep the camera move"*
 
 The clip is exported at 720p, uploaded, run, and the edit lands on `Kaitoi 2` at the same frame. Toggle the track to compare.
 
 **"Turn this frame into a shot."**
-> Image → Video, Seedance2. Prompt: *"a cat jumps into the lake, slow motion, golden hour"*
+> Image → Video, Seedance 2.0. Prompt: *"a cat jumps into the lake, slow motion, golden hour"*
 
 The first frame of the clip seeds a new shot, placed above the original.
 
