@@ -6,8 +6,6 @@ Kaitoi Studio is a hybrid intelligence platform for creative work — a visual c
 
 This plugin brings Kaitoi's video models into the DaVinci Resolve timeline. Park the playhead on a clip, open the panel, describe the change, press **Generate**. The clip's exact range is exported, sent through a Kaitoi model, and the result lands on a new track above the original — graded, trimmed, effects and all, without leaving Resolve.
 
-> Kaitoi Studio is currently in **Private Beta**. [Join the waitlist →](https://kaitoi.io/studio)
-
 ---
 
 ## What You Can Do
@@ -62,7 +60,7 @@ The API key is stored once in `~/.kaitoi/credentials.json` and shared with the o
 
 ## Quick Start
 
-**1. Get a Kaitoi Studio account.** [Join the waitlist](https://kaitoi.io/studio) if you're not in the beta yet, then create an API key in Kaitoi Studio (files and runs read/write scopes; `account_credits:read` is optional).
+**1. Get a Kaitoi Studio account** at [kaitoi.io/studio](https://kaitoi.io/studio) and create an API key in Kaitoi Studio (files and runs read/write scopes; `account_credits:read` is optional).
 
 **2. Install the plugin.**
 
@@ -173,7 +171,7 @@ Optional: run a Studio-authored project instead of the inline graph by setting `
 
 - **DaVinci Resolve Studio** — developed and tested on 21.0 (macOS); earlier versions with Python scripting and `UIManager` should work but are untested. The free edition has no external scripting and no Python access to UIManager.
 - **Python 3.8+** on the path Resolve uses for scripts. Standard library only — no packages to install.
-- A Kaitoi Studio account (Private Beta — [waitlist](https://kaitoi.io/studio)) with an API key. Runs cost Kaitoi credits; the **Reverse Selftest** preset is free.
+- A [Kaitoi Studio](https://kaitoi.io/studio) account with an API key. Runs cost Kaitoi credits; the **Reverse Selftest** preset is free.
 
 ---
 
@@ -228,7 +226,6 @@ Learned on Resolve 21 and handled in `resolve_bridge.py` / `ui.py`:
 - **API docs:** [api.studio.kaitoi.io/api/v1/docs](https://api.studio.kaitoi.io/api/v1/docs)
 - **MCP server:** [github.com/kaitoi-labs/kaitoi-mcp](https://github.com/kaitoi-labs/kaitoi-mcp)
 - **Discord:** [discord.gg/3A5YfXnCH](https://discord.gg/3A5YfXnCH)
-- **Waitlist:** [kaitoi.io/studio](https://kaitoi.io/studio)
 
 ---
 
