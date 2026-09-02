@@ -416,7 +416,12 @@ class Panel:
         self.items["Cancel"].Enabled = False
         if snapshot["error"]:
             self._render_progress(snapshot, failed=True)
-            self.status(snapshot["error"].splitlines()[0])
+            first_line = snapshot["error"].splitlines()[0]
+            if "\n" in snapshot["error"]:
+                config.log(f"job error detail:\n{snapshot['error']}", "ERROR")
+                self.status(f"{first_line}  (full traceback in {config.log_path()})")
+            else:
+                self.status(first_line)
             return False
         if not snapshot["result"]:
             self._render_progress(snapshot, failed=True)

@@ -138,12 +138,21 @@ class Job:
         except resolve_bridge.ResolveError as exc:
             self._fail(str(exc))
             return
+        except Exception:  # noqa: BLE001 - never let the UI loop die on an export hiccup
+            resolve_bridge._restore_after_export(self.session, export)
+            self._fail("Unexpected error during export:\n" + traceback.format_exc())
+            return
         self._start_worker()
 
     def _start_worker(self) -> None:
         self.phase = "network"
-        self._thread = threading.Thread(target=self._run, name="kaitoi-job", daemon=True)
-        self._thread.start()
+        try:
+            self._thread = threading.Thread(target=self._run, name="kaitoi-job", daemon=True)
+            self._thread.start()
+        except Exception as exc:  # noqa: BLE001 - some embedded interpreters cannot spawn threads
+            config.log(f"worker thread unavailable ({exc}); running network steps inline", "WARN")
+            self._thread = None
+            self._run()
 
     def _fail(self, message: str, level: str = "ERROR") -> None:
         with self._lock:
@@ -294,9 +303,10 @@ class Job:
                 self.error = str(exc)
             config.log(f"job failed: {exc}", "ERROR")
         except Exception:  # noqa: BLE001 - a worker thread must never die silently
+            detail = traceback.format_exc()
             with self._lock:
-                self.error = "Unexpected error:\n" + traceback.format_exc()
-            config.log(f"job crashed:\n{traceback.format_exc()}", "ERROR")
+                self.error = "Unexpected error:\n" + detail
+            config.log(f"job crashed:\n{detail}", "ERROR")
         finally:
             self.phase = "done"
 

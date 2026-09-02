@@ -138,11 +138,20 @@ def work_dir() -> str:
 
 
 def log(message: str, level: str = "INFO") -> None:
-    """Append to the plugin log and echo to stdout (Resolve's Console)."""
+    """Append to the plugin log, then echo to stdout (Resolve's Console).
+
+    Must never raise: it is called from the worker thread, and inside
+    Resolve's embedded interpreter ``print`` from a non-main thread can throw.
+    The file write comes first so the log is complete even when the echo
+    fails.
+    """
     line = f"[{time.strftime('%Y-%m-%dT%H:%M:%S')}] [{level}] [Kaitoi] {message}"
-    print(line)
     try:
         with open(log_path(), "a", encoding="utf-8") as fh:
             fh.write(line + "\n")
-    except OSError:
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        print(line)
+    except Exception:  # noqa: BLE001
         pass

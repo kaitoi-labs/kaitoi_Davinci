@@ -204,6 +204,7 @@ Learned on Resolve 21 and handled in `resolve_bridge.py` / `ui.py`:
 - Menu scripts are `exec`'d without `__file__`; the launcher finds its package through the Scripts/Edit symlink.
 - A `ui.Timer` never fires inside `UIDispatcher.RunLoop()` for Python; the panel uses `StepLoop()` in its own loop instead.
 - Resolve calls from a worker thread block under `RunLoop` and deadlock inside Resolve; every Resolve call stays on the main thread.
+- Inside Resolve's embedded interpreter, `print` from a worker thread can raise. The logger writes the file first and swallows echo failures, so worker steps are never lost to a logging error.
 
 ### Troubleshooting
 
