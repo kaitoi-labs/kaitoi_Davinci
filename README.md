@@ -162,6 +162,7 @@ Threading: Resolve is only ever called from the script's main thread. The panel 
 | Auth | Bearer API key, created in Kaitoi Studio |
 | Key store | `~/.kaitoi/credentials.json` (mode 0600) — `api_key`, `base_url`, `web_url`; shared by all Kaitoi plugins |
 | Overrides | `KAITOI_API_KEY` or `KAITOI_API` in the environment; `KAITOI_HOME` relocates `~/.kaitoi` |
+| Resolve scripting | Found automatically; `RESOLVE_SCRIPT_API` and `RESOLVE_SCRIPT_LIB` override the lookup for non-standard Resolve installs |
 | Plugin settings | `~/.kaitoi_resolve/config.json` |
 | History / log | `~/.kaitoi_resolve/history.json`, `~/.kaitoi_resolve/plugin.log` (also echoed to Resolve's Console) |
 | Work folder | `~/Movies/Kaitoi/` — exported sources and downloaded results |
@@ -214,6 +215,7 @@ Learned on Resolve 21 and handled in [`resolve_bridge.py`](kaitoi_resolve/resolv
 ## Troubleshooting
 
 - **Run fails in ~2 s on the model node with `'NoneType' object has no attribute 'startswith'`, 0 credits charged** — that node's provider is not configured for the account. Try another preset, or check the Kaitoi dashboard. Reverse Selftest confirms the plugin itself is fine.
+- **`Could not load the DaVinci Resolve scripting module`** — only happens from a terminal, and means Resolve is not running, scripting is off in *Preferences → System → General*, or Resolve is installed somewhere non-standard. For the last case, point `RESOLVE_SCRIPT_API` at Resolve's `Developer/Scripting` folder and `RESOLVE_SCRIPT_LIB` at its `fusionscript` library. Launched from Resolve's own menu, none of this applies.
 - **Panel does not appear when launched from a terminal** — an earlier script still holds Resolve's UI dispatcher; close its window or restart Resolve.
 - **Every scripting call returns `None`** — Resolve is behind a modal dialog (for example *Cache Location Update Required* when the cache folder is on an offline volume). Dismiss it.
 - **Every request fails after editing the API base URL** — the setting is the origin (`https://api.studio.kaitoi.io`), not the versioned path; `/api/v1` is added by the client.

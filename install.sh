@@ -41,6 +41,8 @@ rm -rf "$TARGET_DIR/kaitoi_resolve"
 if [[ "${1:-}" == "--copy" ]]; then
   cp "$HERE/$LAUNCHER" "$TARGET_DIR/$LAUNCHER"
   cp -R "$HERE/kaitoi_resolve" "$TARGET_DIR/kaitoi_resolve"
+  # Never ship local bytecode: Resolve's Python is not this shell's Python.
+  find "$TARGET_DIR/kaitoi_resolve" -name __pycache__ -type d -prune -exec rm -rf {} +
   echo "Copied to $TARGET_DIR"
 else
   ln -s "$HERE/$LAUNCHER" "$TARGET_DIR/$LAUNCHER"
