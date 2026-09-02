@@ -26,7 +26,7 @@ WINDOW_ID = "KaitoiResolveWin"
 # the worker thread actually gets to execute Python.
 IDLE_SLEEP_SECONDS = 0.05
 WORKER_YIELD_SECONDS = 0.1
-SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+SPINNER = "◐◓◑◒"  # renders clearly in Resolve's UI font; braille glyphs come out as specks
 
 MODE_LABELS = [
     ("v2v", "Video → Video   (restyle / edit the clip itself)"),
@@ -67,7 +67,7 @@ class Panel:
             {
                 "ID": WINDOW_ID,
                 "WindowTitle": "Kaitoi — generate from the timeline",
-                "Geometry": [200, 150, 640, 780],
+                "Geometry": [200, 150, 680, 620],
             },
             self._layout(),
         )
@@ -90,10 +90,12 @@ class Panel:
                     {"ID": "Pages", "Weight": 1.0},
                     [self._generate_page(), self._history_page(), self._settings_page()],
                 ),
+                # Progress strip: one line, fixed height, never overlaps the status row.
+                ui.Label({"ID": "Steps", "Text": "", "Weight": 0.0, "MinimumSize": [0, 22], "Alignment": {"AlignHCenter": True}}),
                 ui.HGroup(
                     {"Weight": 0.0},
                     [
-                        ui.Label({"ID": "Status", "Text": "Ready.", "Weight": 1.0}),
+                        ui.Label({"ID": "Status", "Text": "Ready.", "Weight": 1.0, "WordWrap": True, "MinimumSize": [0, 36]}),
                         ui.Button({"ID": "OpenResult", "Text": "Open result", "Enabled": False, "Weight": 0.0}),
                     ],
                 ),
@@ -108,8 +110,8 @@ class Panel:
                     {"Weight": 0.0},
                     [
                         ui.Label({"Text": "Clip", "Weight": 0.0, "MinimumSize": [70, 0]}),
-                        ui.Label({"ID": "ClipInfo", "Text": "—", "Weight": 1.0}),
-                        ui.Button({"ID": "RefreshClip", "Text": "Refresh", "Weight": 0.0}),
+                        ui.Label({"ID": "ClipInfo", "Text": "—", "Weight": 1.0, "WordWrap": True, "MinimumSize": [0, 36]}),
+                        ui.Button({"ID": "RefreshClip", "Text": "Refresh", "Weight": 0.0, "MinimumSize": [80, 0]}),
                     ],
                 ),
                 ui.HGroup(
@@ -131,6 +133,7 @@ class Panel:
                     {
                         "ID": "Prompt",
                         "Weight": 1.0,
+                        "MinimumSize": [0, 90],
                         "PlaceholderText": "Describe what should change: "
                         "\"restyle as a rainy neon night, keep the camera move\"",
                     }
@@ -158,11 +161,10 @@ class Panel:
                 ui.HGroup(
                     {"Weight": 0.0},
                     [
-                        ui.Button({"ID": "Generate", "Text": "Generate", "Weight": 1.0}),
-                        ui.Button({"ID": "Cancel", "Text": "Cancel", "Enabled": False, "Weight": 0.0}),
+                        ui.Button({"ID": "Generate", "Text": "Generate", "Weight": 1.0, "MinimumSize": [0, 32]}),
+                        ui.Button({"ID": "Cancel", "Text": "Cancel", "Enabled": False, "Weight": 0.0, "MinimumSize": [90, 32]}),
                     ],
                 ),
-                ui.Label({"ID": "Steps", "Text": "", "Weight": 0.0, "WordWrap": True, "MinimumSize": [0, 40]}),
             ]
         )
 
@@ -316,12 +318,12 @@ class Panel:
     def _render_progress(self, snapshot: dict[str, Any] | None, *, failed: bool = False) -> None:
         """Draw the stage strip + spinner from a job snapshot (None = idle)."""
         if snapshot is None:
-            self.items["Steps"].Text = "  ›  ".join(f"○ {name}" for name in pipeline.STAGES)
+            self.items["Steps"].Text = "   ›   ".join(f"○ {name}" for name in pipeline.STAGES_SHORT)
             return
         stage = int(snapshot.get("stage", -1))
         running = bool(snapshot.get("running"))
         parts = []
-        for index, name in enumerate(pipeline.STAGES):
+        for index, name in enumerate(pipeline.STAGES_SHORT):
             if index < stage or (index == stage and not running and not failed):
                 mark = "✓"
             elif index == stage:
@@ -329,7 +331,7 @@ class Panel:
             else:
                 mark = "○"
             parts.append(f"{mark} {name}")
-        self.items["Steps"].Text = "  ›  ".join(parts)
+        self.items["Steps"].Text = "   ›   ".join(parts)
         if running:
             self.spinner_index += 1
             elapsed = int(snapshot.get("elapsed", 0))

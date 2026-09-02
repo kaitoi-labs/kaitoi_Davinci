@@ -36,6 +36,8 @@ STAGES = (
     "Download result",
     "Place on timeline",
 )
+# One-word forms for the progress strip, so all six fit on a single line.
+STAGES_SHORT = ("Export", "Upload", "Graph", "Run", "Download", "Place")
 
 
 class Job:

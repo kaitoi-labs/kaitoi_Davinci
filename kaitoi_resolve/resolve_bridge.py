@@ -265,10 +265,13 @@ def current_clip(session: Session) -> dict[str, Any]:
     }
 
 
-def describe_clip(clip: dict[str, Any]) -> str:
+def describe_clip(clip: dict[str, Any], *, max_name: int = 44) -> str:
     seconds = clip["duration"] / max(clip["fps"], 1.0)
+    name = str(clip["name"])
+    if len(name) > max_name:  # long generated names have no break points; keep the row narrow
+        name = name[: max_name - 1] + "…"
     return (
-        f"{clip['name']}  ·  V{clip['track_index']}  ·  "
+        f"{name}  ·  V{clip['track_index']}  ·  "
         f"{frame_to_timecode(clip['start'], clip['fps'])} → "
         f"{frame_to_timecode(clip['end'], clip['fps'])}  "
         f"({clip['duration']} frames, {seconds:.1f}s @ {clip['fps']:g}fps)"

@@ -122,7 +122,7 @@ Three tabs: **Generate**, **History**, **Settings**.
 **Generate** — Clip (topmost enabled video item under the playhead, with Refresh), Mode, Model, Prompt, Place, and *Send original media* (skip the export and upload the source file as-is: fast, but ignores trims, grade and effects). While a job runs, the status bar shows a spinner, the current step and the elapsed time, and a stage strip tracks progress:
 
 ```
-✓ Export clip  ›  ✓ Upload asset  ›  ⠧ Prepare graph  ›  ○ Run model  ›  ○ Download result  ›  ○ Place on timeline
+✓ Export   ›   ✓ Upload   ›   ◐ Graph   ›   ○ Run   ›   ○ Download   ›   ○ Place
 ```
 
 **History** — one row per finished run. *Open selected* plays the file; *Re-import to timeline* places it again under the current playhead clip; *Clear* empties the list (files on disk are kept).
