@@ -1,0 +1,30 @@
+# ---- Secrets / local config ----
+.env
+.env.*
+credentials.json
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ---- Logs / temp ----
+*.log
+tmp/
+*.tmp
+
+# ---- Media produced while testing ----
+*.mp4
+*.mov
+*.png
+*.jpg
+
+# ---- OS junk ----
+.DS_Store
+Thumbs.db
+
+# ---- Editors ----
+.idea/
+.vscode/
+*.swp
